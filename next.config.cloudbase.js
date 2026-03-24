@@ -4,6 +4,10 @@ const nextConfig = {
   output: 'export',
   distDir: 'dist',
   
+  // 部署在子路径下，需要配置 basePath
+  basePath: '/CNSC-request-collection-system',
+  assetPrefix: '/CNSC-request-collection-system',
+  
   // 图片配置
   images: {
     unoptimized: true,
