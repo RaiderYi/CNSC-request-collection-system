@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",
-    "build:cloudbase": "cp next.config.cloudbase.ts next.config.ts && next build",
+    "build:cloudbase": "cp next.config.cloudbase.js next.config.js && next build",
     "start": "next start",
     "lint": "eslint",
     "db:generate": "prisma generate",
