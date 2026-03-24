@@ -1,0 +1,24 @@
+{
+  "version": "2.0",
+  "envId": "{{env.ENV_ID}}",
+  "framework": {
+    "name": "request-collection",
+    "plugins": {
+      "node": {
+        "use": "@cloudbase/framework-plugin-node",
+        "inputs": {
+          "name": "request-collection",
+          "path": "/",
+          "buildCommand": "npm install && npm run build",
+          "functionOptions": {
+            "memorySize": 512,
+            "timeout": 30,
+            "envVariables": {
+              "NODE_ENV": "production"
+            }
+          }
+        }
+      }
+    }
+  }
+}
