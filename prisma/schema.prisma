@@ -1,0 +1,86 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  username  String   @unique
+  name      String
+  email     String   @unique
+  password  String
+  role      String   @default("requestor") // requestor, admin
+  unit      String?
+  phone     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  requests  Request[]
+}
+
+model Request {
+  id                    String   @id @default(uuid())
+  requestId             String   @unique // REQ-XXXXXX
+  
+  // 基本信息
+  submitterUnit         String
+  submitterUnitType     String
+  parentUnit            String
+  requesterName         String
+  requesterPhone        String
+  requesterEmail        String
+  contactName           String
+  contactPhone          String
+  contactEmail          String
+  submitDate            DateTime
+  expectedDate          DateTime
+  requestName           String
+  
+  // 业务信息
+  businessDomains       String[]
+  platformModules       String[]
+  hasProcessChange      Boolean  @default(false)
+  businessDescription   String?
+  
+  // 需求详情
+  userRole              String
+  businessScenario      String
+  painPoints            String
+  expectedSolution      String
+  
+  // 价值分析
+  priority              String   // high, medium, low
+  priorityReason        String
+  managementValue       String
+  economicValue         String
+  
+  // 状态
+  status                String   @default("draft") // draft, submitted, reviewing, approved, rejected, completed
+  
+  // 关联
+  userId                String
+  user                  User     @relation(fields: [userId], references: [id])
+  
+  // 时间戳
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  submittedAt           DateTime?
+  
+  // 审核信息
+  reviewNotes           String?
+  reviewedBy            String?
+  reviewedAt            DateTime?
+}
+
+model SystemConfig {
+  id    String @id @default(uuid())
+  key   String @unique
+  value String
+}

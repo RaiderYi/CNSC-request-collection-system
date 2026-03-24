@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: request-collection-app
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/request_collection?schema=public
+      - JWT_SECRET=${JWT_SECRET:-your-jwt-secret-key-min-32-characters-long}
+      - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
+    depends_on:
+      - db
+    networks:
+      - request-network
+
+  db:
+    image: postgres:16-alpine
+    container_name: request-collection-db
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=request_collection
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - request-network
+
+  # 可选：使用 Nginx 作为反向代理
+  nginx:
+    image: nginx:alpine
+    container_name: request-collection-nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - app
+    networks:
+      - request-network
+    profiles:
+      - production
+
+volumes:
+  postgres_data:
+
+networks:
+  request-network:
+    driver: bridge
