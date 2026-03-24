@@ -4,9 +4,8 @@ const nextConfig = {
   output: 'export',
   distDir: 'dist',
   
-  // 部署在子路径下，需要配置 basePath
+  // 部署在子路径下
   basePath: '/CNSC-request-collection-system',
-  assetPrefix: '/CNSC-request-collection-system',
   
   // 图片配置
   images: {
@@ -23,7 +22,7 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   
-  // 禁用 API 路由（纯静态不需要）
+  // 禁用 API 路由
   trailingSlash: true,
 };
 
